@@ -3,87 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOD x ANIME | ULTRA STABLE</title>
+    <title>GOD x ANIME | ANIME-SALT ENGINE</title>
     <style>
-        :root { --neon: #00ffcc; --pink: #ff00c8; }
-        body, html { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        :root { --neon: #00ffcc; --pink: #ff00c8; --dark: #050505; }
+        body, html { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; }
 
-        .header { padding: 15px; background: #050505; border-bottom: 2px solid var(--neon); text-align: center; box-shadow: 0 5px 20px rgba(0, 255, 204, 0.2); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 24px; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+        /* Premium Header */
+        .header { padding: 15px; background: var(--dark); border-bottom: 2px solid var(--neon); text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); }
+        .logo { font-size: 24px; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); text-transform: uppercase; }
+        .engine-tag { font-size: 10px; color: var(--pink); position: absolute; right: 15px; top: 22px; font-weight: bold; }
 
-        .player-container { width: 95%; max-width: 900px; margin: 25px auto; position: relative; border-radius: 12px; overflow: hidden; background: #080808; border: 1px solid #222; aspect-ratio: 16/9; }
-        .player-container::before { content: ''; position: absolute; top: -3px; left: -3px; right: -3px; bottom: -3px; background: linear-gradient(45deg, #ff0000, #00ffcc, #ff00c8, #002bff); background-size: 400%; z-index: -1; filter: blur(10px); animation: aura 10s linear infinite; }
-        @keyframes aura { 0% {background-position: 0 0;} 100% {background-position: 400% 0;} }
+        /* Video Player Section */
+        .player-container { width: 95%; max-width: 900px; margin: 20px auto; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid #222; aspect-ratio: 16/9; box-shadow: 0 0 30px rgba(0,0,0,0.5); position: relative; }
+        iframe { width: 100%; height: 100%; border: none; }
         
-        iframe { width: 100%; height: 100%; border: none; background: #000; }
+        .status-bar { text-align: center; color: var(--neon); font-size: 12px; font-weight: bold; margin: 10px 0; text-transform: uppercase; }
 
-        .grid-title { padding: 15px 25px; font-size: 16px; color: var(--pink); font-weight: bold; text-transform: uppercase; }
-        .anime-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 0 20px 60px; }
+        /* Anime Grid like AnimeSalt */
+        .section-title { padding: 10px 20px; color: var(--pink); font-size: 14px; font-weight: bold; text-transform: uppercase; border-left: 4px solid var(--pink); margin-left: 15px; }
+        .anime-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; padding: 15px; }
         
-        .card { background: #0a0a0a; border-radius: 10px; overflow: hidden; cursor: pointer; transition: 0.4s; border: 1px solid #1a1a1a; }
-        .card:hover { transform: translateY(-8px); border-color: var(--neon); box-shadow: 0 8px 20px rgba(0,255,204,0.3); }
+        .card { background: #0a0a0a; border-radius: 8px; overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid #1a1a1a; }
+        .card:hover { transform: scale(1.05); border-color: var(--neon); box-shadow: 0 0 15px rgba(0,255,204,0.2); }
         .card img { width: 100%; height: 180px; object-fit: cover; }
-        .card-info { padding: 10px; text-align: center; font-size: 11px; font-weight: 800; }
-
-        #status { text-align: center; color: var(--neon); font-size: 12px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
-        .server-btn { background: #111; border: 1px solid var(--neon); color: var(--neon); padding: 5px 10px; border-radius: 5px; cursor: pointer; margin: 5px; font-size: 10px; }
+        .card-name { padding: 10px; font-size: 11px; text-align: center; font-weight: 600; color: #ccc; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="logo">GOD x ANIME</div>
+    <div class="engine-tag">ANIME-SALT ENGINE</div>
 </div>
 
 <div class="player-container">
-    <iframe id="video-frame" src="about:blank" allowfullscreen></iframe>
+    <iframe id="as-player" src="https://animesalt.ac/embed/jujutsu-kaisen-episode-1" allowfullscreen></iframe>
 </div>
 
-<div id="status">[ READY TO SUMMON ]</div>
-<div style="text-align: center;">
-    <button class="server-btn" onclick="changeServer(1)">Server 1</button>
-    <button class="server-btn" onclick="changeServer(2)">Server 2</button>
-</div>
+<div class="status-bar" id="play-status">Now Playing: Jujutsu Kaisen</div>
 
-<div class="grid-title">Popular Animes</div>
+<div class="section-title">Trending Now</div>
 <div class="anime-grid" id="grid"></div>
 
 <script>
-    let currentAnimeId = "";
-    
-    // Exact IDs for 2embed and Vidsrc
-    const list = [
-        { name: "Jujutsu Kaisen", id: "jujutsu-kaisen", img: "https://wallpapercave.com/wp/wp5263236.jpg" },
-        { name: "Naruto Shippuden", id: "naruto-shippuden", img: "https://images3.alphacoders.com/992/992011.jpg" },
-        { name: "Solo Leveling", id: "solo-leveling", img: "https://images.alphacoders.com/134/1345459.png" },
-        { name: "Demon Slayer", id: "demon-slayer-kimetsu-no-yaiba", img: "https://images7.alphacoders.com/101/1011153.jpg" }
+    // List directly linked to AnimeSalt naming convention
+    const animes = [
+        { name: "Jujutsu Kaisen", slug: "jujutsu-kaisen", img: "https://wallpapercave.com/wp/wp5263236.jpg" },
+        { name: "Naruto Shippuden", slug: "naruto-shippuden", img: "https://images3.alphacoders.com/992/992011.jpg" },
+        { name: "Solo Leveling", slug: "solo-leveling", img: "https://images.alphacoders.com/134/1345459.png" },
+        { name: "Demon Slayer", slug: "demon-slayer-kimetsu-no-yaiba", img: "https://images7.alphacoders.com/101/1011153.jpg" }
     ];
 
     const grid = document.getElementById('grid');
-    list.forEach(a => {
+    animes.forEach(a => {
         grid.innerHTML += `
-            <div class="card" onclick="play('${a.id}', '${a.name}')">
+            <div class="card" onclick="loadAnime('${a.slug}', '${a.name}')">
                 <img src="${a.img}" alt="${a.name}">
-                <div class="card-info">${a.name}</div>
+                <div class="card-name">${a.name}</div>
             </div>
         `;
     });
 
-    function play(id, name) {
-        currentAnimeId = id;
-        document.getElementById('status').innerText = "Streaming: " + name;
-        changeServer(1);
+    function loadAnime(slug, name) {
+        const player = document.getElementById('as-player');
+        // Direct integration with AnimeSalt source
+        player.src = `https://animesalt.ac/embed/${slug}-episode-1`;
+        document.getElementById('play-status').innerText = "Domain Expanded: " + name;
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function changeServer(s) {
-        if(!currentAnimeId) return;
-        const frame = document.getElementById('video-frame');
-        if(s === 1) {
-            frame.src = `https://www.2embed.cc/embed/anime/${currentAnimeId}/1/1`;
-        } else {
-            frame.src = `https://vidsrc.to/embed/anime/${currentAnimeId}`;
-        }
+        
+        // Sukuna Voice Effect
+        const msg = new SpeechSynthesisUtterance("Summoning " + name);
+        msg.pitch = 0.5;
+        window.speechSynthesis.speak(msg);
     }
 </script>
 
