@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOD x ANIME | PREMIUM</title>
+    <style>
+        :root { --neon: #00ffcc; --pink: #ff00c8; }
+        body, html { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+
+        /* Custom Header */
+        .header { padding: 20px; background: #050505; border-bottom: 2px solid var(--neon); text-align: center; box-shadow: 0 5px 20px rgba(0, 255, 204, 0.3); }
+        .logo { font-size: 26px; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); letter-spacing: 2px; }
+
+        /* RGB Video Player Wrapper */
+        .player-container { width: 92%; max-width: 950px; margin: 30px auto; position: relative; border-radius: 15px; overflow: hidden; background: #000; border: 1px solid #222; }
+        .player-container::before {
+            content: ''; position: absolute; top: -3px; left: -3px; right: -3px; bottom: -3px;
+            background: linear-gradient(45deg, #ff0000, #00ffcc, #ff00c8, #002bff);
+            background-size: 400%; z-index: -1; filter: blur(12px); animation: aura 10s linear infinite;
+        }
+        @keyframes aura { 0% {background-position: 0 0;} 100% {background-position: 400% 0;} }
+        iframe { width: 100%; height: 520px; border: none; background: #000; }
+
+        /* Anime Selection Grid */
+        .grid-title { padding: 20px 30px; font-size: 18px; color: var(--pink); font-weight: bold; text-transform: uppercase; }
+        .anime-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; padding: 0 25px 60px; }
+        .card { background: #0a0a0a; border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.4s; border: 1px solid #1a1a1a; }
+        .card:hover { transform: translateY(-10px); border-color: var(--neon); box-shadow: 0 10px 20px rgba(0,255,204,0.2); }
+        .card img { width: 100%; height: 210px; object-fit: cover; }
+        .card-info { padding: 12px; text-align: center; font-size: 12px; font-weight: 700; }
+
+        @media (max-width: 768px) { iframe { height: 260px; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">GOD x ANIME</div>
+</div>
+
+<div class="player-container">
+    <iframe id="main-stream" src="about:blank" allowfullscreen></iframe>
+</div>
+
+<div id="playing-tag" style="text-align: center; color: var(--neon); font-size: 14px; font-weight: bold;">[ READY TO STREAM ]</div>
+
+<div class="grid-title">Popular Animes</div>
+<div class="anime-grid" id="grid"></div>
+
+<script>
+    // Anime Database
+    const list = [
+        { name: "Jujutsu Kaisen (Sukuna)", id: "jujutsu-kaisen-tv", img: "https://wallpapercave.com/wp/wp5263236.jpg" },
+        { name: "Naruto Shippuden", id: "naruto-shippuden", img: "https://images3.alphacoders.com/992/992011.jpg" },
+        { name: "Solo Leveling", id: "solo-leveling", img: "https://images.alphacoders.com/134/1345459.png" },
+        { name: "Demon Slayer", id: "demon-slayer-kimetsu-no-yaiba", img: "https://images7.alphacoders.com/101/1011153.jpg" }
+    ];
+
+    const grid = document.getElementById('grid');
+    list.forEach(a => {
+        grid.innerHTML += `
+            <div class="card" onclick="stream('${a.id}', '${a.name}')">
+                <img src="${a.img}" alt="${a.name}">
+                <div class="card-info">${a.name}</div>
+            </div>
+        `;
+    });
+
+    function stream(id, title) {
+        const player = document.getElementById('main-stream');
+        // Clean Scraper API for direct video focus
+        player.src = `https://vidsrc.to/embed/anime/${id}`;
+        document.getElementById('playing-tag').innerText = "Streaming: " + title;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Sukuna Voice Effect
+        const msg = new SpeechSynthesisUtterance("Summoning " + title);
+        msg.pitch = 0.5;
+        window.speechSynthesis.speak(msg);
+    }
+</script>
+
+</body>
+</html>
