@@ -3,32 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOD x ANIME | STABLE V3</title>
+    <title>GOD x ANIME | ULTRA STABLE</title>
     <style>
         :root { --neon: #00ffcc; --pink: #ff00c8; }
         body, html { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* Neon Header */
         .header { padding: 15px; background: #050505; border-bottom: 2px solid var(--neon); text-align: center; box-shadow: 0 5px 20px rgba(0, 255, 204, 0.2); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 24px; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); letter-spacing: 2px; }
+        .logo { font-size: 24px; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
 
-        /* RGB Video Player Container */
         .player-container { width: 95%; max-width: 900px; margin: 25px auto; position: relative; border-radius: 12px; overflow: hidden; background: #080808; border: 1px solid #222; aspect-ratio: 16/9; }
         .player-container::before { content: ''; position: absolute; top: -3px; left: -3px; right: -3px; bottom: -3px; background: linear-gradient(45deg, #ff0000, #00ffcc, #ff00c8, #002bff); background-size: 400%; z-index: -1; filter: blur(10px); animation: aura 10s linear infinite; }
         @keyframes aura { 0% {background-position: 0 0;} 100% {background-position: 400% 0;} }
         
         iframe { width: 100%; height: 100%; border: none; background: #000; }
 
-        /* Anime Selection Grid */
         .grid-title { padding: 15px 25px; font-size: 16px; color: var(--pink); font-weight: bold; text-transform: uppercase; }
         .anime-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 0 20px 60px; }
         
         .card { background: #0a0a0a; border-radius: 10px; overflow: hidden; cursor: pointer; transition: 0.4s; border: 1px solid #1a1a1a; }
         .card:hover { transform: translateY(-8px); border-color: var(--neon); box-shadow: 0 8px 20px rgba(0,255,204,0.3); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
-        .card-info { padding: 10px; text-align: center; font-size: 12px; font-weight: 800; color: #fff; }
+        .card img { width: 100%; height: 180px; object-fit: cover; }
+        .card-info { padding: 10px; text-align: center; font-size: 11px; font-weight: 800; }
 
-        #status { text-align: center; color: var(--neon); font-size: 13px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
+        #status { text-align: center; color: var(--neon); font-size: 12px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
+        .server-btn { background: #111; border: 1px solid var(--neon); color: var(--neon); padding: 5px 10px; border-radius: 5px; cursor: pointer; margin: 5px; font-size: 10px; }
     </style>
 </head>
 <body>
@@ -38,21 +36,27 @@
 </div>
 
 <div class="player-container">
-    <iframe id="video-frame" src="about:blank" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    <iframe id="video-frame" src="about:blank" allowfullscreen></iframe>
 </div>
 
-<div id="status">[ SELECT YOUR DOMAIN ]</div>
+<div id="status">[ READY TO SUMMON ]</div>
+<div style="text-align: center;">
+    <button class="server-btn" onclick="changeServer(1)">Server 1</button>
+    <button class="server-btn" onclick="changeServer(2)">Server 2</button>
+</div>
 
 <div class="grid-title">Popular Animes</div>
 <div class="anime-grid" id="grid"></div>
 
 <script>
-    // List of Animes with corrected IDs
+    let currentAnimeId = "";
+    
+    // Exact IDs for 2embed and Vidsrc
     const list = [
         { name: "Jujutsu Kaisen", id: "jujutsu-kaisen", img: "https://wallpapercave.com/wp/wp5263236.jpg" },
         { name: "Naruto Shippuden", id: "naruto-shippuden", img: "https://images3.alphacoders.com/992/992011.jpg" },
         { name: "Solo Leveling", id: "solo-leveling", img: "https://images.alphacoders.com/134/1345459.png" },
-        { name: "Demon Slayer", id: "demon-slayer", img: "https://images7.alphacoders.com/101/1011153.jpg" }
+        { name: "Demon Slayer", id: "demon-slayer-kimetsu-no-yaiba", img: "https://images7.alphacoders.com/101/1011153.jpg" }
     ];
 
     const grid = document.getElementById('grid');
@@ -66,20 +70,20 @@
     });
 
     function play(id, name) {
-        const frame = document.getElementById('video-frame');
-        const status = document.getElementById('status');
-        
-        // Multi-Source Bypass: Agar ek na chale toh dusra source try karega
-        // Hum "SuperEmbed" use kar rahe hain jo sabse stable hai
-        frame.src = `https://www.2embed.cc/embed/anime/${id}/1/1`;
-        
-        status.innerText = "Streaming Now: " + name;
+        currentAnimeId = id;
+        document.getElementById('status').innerText = "Streaming: " + name;
+        changeServer(1);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-        // Sukuna Dark Voice
-        const msg = new SpeechSynthesisUtterance("Domain Expansion: " + name);
-        msg.pitch = 0.5;
-        window.speechSynthesis.speak(msg);
+    function changeServer(s) {
+        if(!currentAnimeId) return;
+        const frame = document.getElementById('video-frame');
+        if(s === 1) {
+            frame.src = `https://www.2embed.cc/embed/anime/${currentAnimeId}/1/1`;
+        } else {
+            frame.src = `https://vidsrc.to/embed/anime/${currentAnimeId}`;
+        }
     }
 </script>
 
